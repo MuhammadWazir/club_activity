@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Guide extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'email',
+        'date_of_birth',
+        'joining_date',
+        'photo',
+        'status',
+        'password'
+    ];
 }

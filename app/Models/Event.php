@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Event extends Model
-{
+{   public $timestamps = false;
     use HasFactory;
     protected $fillable = [
         'description',

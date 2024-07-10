@@ -17,24 +17,24 @@ class LoginUserController extends Controller
         return view('auth.loginGuide');
     }
     public function store(Request $request)
-    {
-        // Validate the form data
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:8, string'
-        ]);
-
-        // Attempt to log the user in
-        if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            // if successful, then redirect to their intended location
-            return redirect()->intended(route('public.home'));
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string|min:8'
+    ]);
+    if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
+        $user = Auth::guard('web')->user();
+        if ($user->is_admin==1) {
+            return redirect()->route('admin.events');
         } else {
-            // if unsuccessful, then redirect back to the login with the form data
-            return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
-            ]);
+            return redirect()->intended(route('public.home'));
         }
+    } else {
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
+}
     public function storeGuide(Request $request)
 {
     // Validate the form data

@@ -13,7 +13,10 @@ class EventController extends Controller
     {   $events= Event::all();
         return view('public.event_list', ['events' => $events]);
     }
-
+    public function adminEvents()
+    {   $events= Event::all();
+        return view('admin.event_list', ['events' => $events]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -21,6 +24,7 @@ class EventController extends Controller
     {
         return view('admin.add_event');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -38,7 +42,7 @@ class EventController extends Controller
 
         $event = Event::create($validated);
 
-        return redirect()->route('events.index')->with('success', 'Event created successfully');
+        return redirect()->route('admin.events')->with('success', 'Event created successfully');
     }
 
     /**
@@ -48,6 +52,10 @@ class EventController extends Controller
     {   $user = Auth::user();
         $joined = $event->users()->where('user_id', $user->id)->exists();
         return view('public.event_details', ['event' => $event, 'joined'=>$joined]);
+    }
+    public function showAdmin(Event $event)
+    {
+        return view('admin.event', ['event' => $event]);
     }
 
     /**
@@ -74,7 +82,7 @@ class EventController extends Controller
 
         $event->update($validated);
 
-        return redirect()->route('events.index')->with('success', 'Event updated successfully');
+        return redirect()->route('admin.events')->with('success', 'Event updated successfully');
     }
 
     /**
@@ -84,7 +92,7 @@ class EventController extends Controller
     {
         $event->delete();
 
-        return redirect()->route('events.index')->with('success', 'Event deleted successfully');
+        return redirect()->route('admin.events')->with('success', 'Event deleted successfully');
     }
     public function join(Event $event)
     {

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Guide;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use Illuminate\Support\Facades;
+use Illuminate\Validation\Rules\Password;
 class GuideController
 {
     /**
@@ -20,6 +22,27 @@ class GuideController
     {
         $guides= Guide::all();
         return view("admin.view_guides");
+    }
+    public function update(Request $request, Guide $guide)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'min:5'],
+            'email' => 'required|email|unique:users,email,' . $guide->id,
+            'password' => ['nullable', 'string', 'min:8', 'confirmed', Password::defaults()],
+            'date_of_birth' => 'nullable|date',
+            'joining_date' => 'nullable|date',
+            'photo' => 'nullable|string|max:255',
+        ]);
+
+        if ($request->filled('password')) {
+            $validated['password'] = Hash::make($request->password);
+        } else {
+            unset($validated['password']);
+        }
+
+        $guide->update($validated);
+
+        return to_route('guide.events.all', ['guide'=>$guide]);
     }
 
     /**
@@ -68,5 +91,8 @@ class GuideController
     public function allEvents(Guide $guide){
         $events= Event::all();
         return view('guide.events', ['events'=>$events, 'guide'=>$guide]);
+    }
+    public function edit(Guide $guide){
+        return view('guide.edit_profile', ['guide'=>$guide]);
     }
 }

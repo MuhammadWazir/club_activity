@@ -10,7 +10,7 @@
           <a class="nav-link" href="{{route('profile.edit')}}">Edit Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{route('guides.view')}}">View Guides</a>
+          <a class="nav-link" href="{{route('guides.view')}}">Guides</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" style="color:red" href="{{route('logout')}}">Logout</a>

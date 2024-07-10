@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Guide;
 use Illuminate\Http\Request;
-
+use App\Models\Event;
 class GuideController
 {
     /**
@@ -13,7 +13,7 @@ class GuideController
     public function indexForPublic()
     {
         $guides= Guide::all();
-        return view("public.view_guides");
+        return view("public.view_guides", ['guides'=>$guides]);
     }
 
     public function indexForAdmin()
@@ -60,5 +60,13 @@ class GuideController
     {
         $guide->delete();
         return view("admin.view_guides");
+    }
+    public function guideEvents(Guide $guide){
+        $events= $guide->events;
+        return view('guide.events', ['events'=>$events, 'guide'=>$guide]);
+    }
+    public function allEvents(Guide $guide){
+        $events= Event::all();
+        return view('guide.events', ['events'=>$events, 'guide'=>$guide]);
     }
 }

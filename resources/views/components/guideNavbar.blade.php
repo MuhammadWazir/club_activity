@@ -7,10 +7,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="{{route('profile.edit')}}">Edit Profile</a>
+          <a class="nav-link" href="{{route('guide.profile.edit')}}">Edit Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{route('guides.view')}}">View Guides</a>
+          <a class="nav-link" href="{{route('guide.home', ['guide'=>$guide])}}">View Your Events</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" style="color:red" href="{{route('logout')}}">Logout</a>

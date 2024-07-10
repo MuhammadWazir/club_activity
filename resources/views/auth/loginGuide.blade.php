@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card p-4 shadow-sm" style="width: 100%; max-width: 400px;">
             <h3 class="text-center mb-4">Login</h3>
-            <form method="POST" action="{{ route('login.handle') }}">
+            <form method="POST" action="{{ route('guide.login.handle') }}">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>

@@ -3,15 +3,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $events = Event::all();
+    {   $events= Event::all();
         return view('public.event_list', ['events' => $events]);
     }
 
@@ -46,15 +45,16 @@ class EventController extends Controller
      * Display the specified resource.
      */
     public function show(Event $event)
-    {
-        return view('public.event_details', ['event' => $event]);
+    {   $user = Auth::user();
+        $joined = $event->users()->where('user_id', $user->id)->exists();
+        return view('public.event_details', ['event' => $event, 'joined'=>$joined]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Event $event)
-    {
+    { 
         return view('admin.edit_event', ['event' => $event]);
     }
 
@@ -91,9 +91,18 @@ class EventController extends Controller
         $user = Auth::user();
 
         // Attach the user to the event
-        $event->users()->attach($user->id);
+        $event->users()->attach($user);
 
-        return redirect()->route('events.index', $event)->with('success', 'You have successfully joined the event');
+        return redirect()->route('public.home', $event)->with('success', 'You have successfully joined the event');
+    }
+    public function leave(Event $event)
+    {
+        $user = Auth::user();
+
+        // Attach the user to the event
+        $event->users()->detach($user);
+
+        return redirect()->route('public.home', $event)->with('success', 'You have successfully left the event');
     }
 }
 ?>

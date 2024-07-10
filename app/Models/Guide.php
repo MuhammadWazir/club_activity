@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Guide extends Model
 {
@@ -17,4 +18,8 @@ class Guide extends Model
         'status',
         'password'
     ];
+    public function events():HasMany
+    {
+        return $this->HasMany(Event::class);
+    }
 }

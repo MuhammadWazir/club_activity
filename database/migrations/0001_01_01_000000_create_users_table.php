@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('profession');
             $table->string('nationality');
             $table->string('password');
-            $table->string('role');
+            $table->boolean('is_admin');
             $table->rememberToken();
             $table->timestamps();
         });

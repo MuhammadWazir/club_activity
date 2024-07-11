@@ -28,6 +28,13 @@
                     <label for="cost" class="form-label">Cost</label>
                     <input type="number" class="form-control" id="cost" name="cost">
                 </div>
+                <label for="guide" class="form-label">Guide</label>
+                <select id="guideDropdown" class="form-control" name="guide">
+                    <option value="">Select guide</option>
+                    @foreach($guides as $guide)
+                    <option value="{{ $guide->id }}">{{ $guide->name }}</option>
+                    @endforeach
+                </select>
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
                     <input type="text" class="form-control" id="status" name="status" placeholder="Event status">

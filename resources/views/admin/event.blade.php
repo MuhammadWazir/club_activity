@@ -9,6 +9,7 @@
                 <p class="card-text"><strong>Cost:</strong> {{ $event->cost }} $</p>
                 <a href="{{route('admin.event.edit', ['event'=>$event])}}" class="btn btn-primary">Edit Event</a>
                 <a href="{{route('admin.event.delete', ['event'=>$event])}}" class="btn btn-danger">Delete Event</a>
+                <a href="{{route('admin.event.members', ['event'=>$event])}}" class="btn btn-danger">View Members</a>
             </div>
         </div>
     </div>

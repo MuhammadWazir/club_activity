@@ -25,9 +25,9 @@ class LoginUserController extends Controller
     if (Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password])) {
         $user = Auth::guard('web')->user();
         if ($user->is_admin==1) {
-            return redirect()->route('admin.events');
+            return to_route('admin.events');
         } else {
-            return redirect()->intended(route('public.home'));
+            return to_route('public.home');
         }
     } else {
         return back()->withErrors([

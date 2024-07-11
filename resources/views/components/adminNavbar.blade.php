@@ -10,13 +10,13 @@
           <a class="nav-link" href="{{route('admin.events')}}">Events</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Guides</a>
+          <a class="nav-link" href="{{route('admin.guides')}}">Guides</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Members</a>
+          <a class="nav-link" href="{{route('admin.members')}}">Members</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Admins</a>
+          <a class="nav-link" href="{{route('admin.admins')}}">Admins</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" style="color:red" href="{{route('logout')}}">Logout</a>

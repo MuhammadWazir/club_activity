@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Guide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 class EventController extends Controller
@@ -21,28 +22,34 @@ class EventController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('admin.add_event');
+    {   
+        $guides = Guide::all();
+        return view('admin.add_event', ['guides'=>$guides]);
     }
-
+    public function eventMembers(Event $event){
+        $members= $event->users;
+        return view('admin.view_event_members', ['members'=>$members, 'event'=>$event]);
+    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'description' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'date_from' => 'required|date',
-            'date_to' => 'required|date|after_or_equal:date_from',
-            'cost' => 'required|numeric',
-            'status' => 'required|string|max:255',
-        ]);
+    $validated = $request->validate([
+        'description' => 'required|string|max:255',
+        'category' => 'required|string|max:255',
+        'date_from' => 'required|date',
+        'date_to' => 'required|date|after_or_equal:date_from',
+        'cost' => 'required|numeric',
+        'status' => 'required|string|max:255',
+        'guide_id' => 'required|exists:guides,id',
+    ]);
 
-        $event = Event::create($validated);
-
-        return redirect()->route('admin.events')->with('success', 'Event created successfully');
+    // Create the event using the validated data
+    $event = Event::create($validated);
+    $events= Event::all();
+    return view('admin.event_list', ['events'=>$events]);
     }
 
     /**

@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Guide;
 use Illuminate\Http\Request;
 use App\Models\Event;
-use Illuminate\Support\Facades;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades;
 class GuideController
 {
     /**
@@ -21,7 +22,7 @@ class GuideController
     public function indexForAdmin()
     {
         $guides= Guide::all();
-        return view("admin.view_guides");
+        return view("admin.view_guides", ['guides'=>$guides]);
     }
     public function update(Request $request, Guide $guide)
     {
@@ -52,29 +53,24 @@ class GuideController
     {
         return view("admin.add_guide");
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'min:5'],
             'email' => 'required|email|unique:users',
-            'password' => ['required', 'string', 'min:8', 'confirmed', Password::defaults()],
+            'password' => ['required', 'string', 'min:8',  Password::defaults()],
         ]);
         // Create the user...
-        $user = User::create([
+        $guide = Guide::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'date_of_birth'=>$request->date_of_birth,
             'joining_date'=>$request->joining_date,
             'photo'=>$request->photo,
-            'profession'=>$request->profession,
-            'status'=>$request->status
         ]);
-        return view("admin.view_guides");
+        $guides = Guide::all();
+        return view("admin.view_guides", ['guides'=>$guides]);
     }
     /**
      * Remove the specified resource from storage.
@@ -82,7 +78,8 @@ class GuideController
     public function destroy(Guide $guide)
     {
         $guide->delete();
-        return view("admin.view_guides");
+        $guides = Guide::all();
+        return view("admin.view_guides", ['guides'=>$guides]);
     }
     public function guideEvents(Guide $guide){
         $events= $guide->events;

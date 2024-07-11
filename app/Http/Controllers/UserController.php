@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\Event;
 
 class UserController extends Controller
 {
@@ -17,6 +19,11 @@ class UserController extends Controller
     {
         $members = User::where('is_admin', false)->get();
         return view('admin.members', ['members' => $members]);
+    }
+    public function indexAdmin()
+    {
+        $admins = User::where('is_admin', true)->get();
+        return view('admin.view_admins', ['admins' => $admins]);
     }
 
     /**
@@ -72,10 +79,40 @@ class UserController extends Controller
     {
         return view('auth.register');
     }
-
+    public function registerAdmin()
+    {
+        return view('admin.add_admin');
+    }
     /**
      * Store a newly created user in storage.
      */
+    public function storeAdmin(Request $request)
+    {
+        // Validate the request...
+        $request->validate([
+            'name' => ['required', 'string', 'max:255', 'min:5'],
+            'email' => 'required|email|unique:users',
+            'password' => ['required', 'string', 'min:8', Password::defaults()],
+        ]);
+
+        // Create the user...
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'gender' => $request->gender,
+            'date_of_birth' => $request->date_of_birth,
+            'joining_date' => $request->joining_date,
+            'mobile_number' => $request->mobile_number,
+            'emergency_number' => $request->emergency_number,
+            'photo' => $request->photo,
+            'profession' => $request->profession,
+            'nationality' => $request->nationality,
+            'is_admin' => true,
+        ]);
+        // Redirect to a specific route or page after registration
+        return to_route("admin.admins");
+    }
     public function store(Request $request)
     {
         // Validate the request...
@@ -106,5 +143,50 @@ class UserController extends Controller
 
         // Redirect to a specific route or page after registration
         return to_route("public.home");
+    }
+    public function adminMembers(){
+        $nonAdminUsers = User::where('is_admin', 0)->get();
+        return view('admin.members', ['members'=>$nonAdminUsers]);
+    }
+    public function memberEvents(User $member){
+        $events = $member->events;
+        return view('admin.view_joined_events', ['events'=>$events, 'member'=>$member]);
+    }
+    public function removeMemberFromEvent(Event $event, User $member){
+        $event->users()->detach($member);
+        $events = $member->events;
+        return view('admin.view_joined_events', ['events'=>$events, 'member'=>$member]);
+    }
+    public function destroy(User $member)
+    {
+        // Check if the user exists
+        if ($member) {
+            // Delete the user
+            $member->delete();
+            
+            // Redirect back with a success message
+            return redirect()->route('admin.members')
+                             ->with('success', 'User deleted successfully.');
+        }
+
+        // Redirect back with an error message if user not found
+        return redirect()->route('admin.members')
+                         ->with('error', 'User not found.');
+    }
+    public function destroyAdmin(User $admin)
+    {
+        // Check if the user exists
+        if ($admin) {
+            // Delete the user
+            $admin->delete();
+            
+            // Redirect back with a success message
+            return redirect()->route('admin.admins')
+                             ->with('success', 'User deleted successfully.');
+        }
+
+        // Redirect back with an error message if user not found
+        return redirect()->route('admin.admins')
+                         ->with('error', 'User not found.');
     }
 }

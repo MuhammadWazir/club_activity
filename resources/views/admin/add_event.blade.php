@@ -2,7 +2,7 @@
     <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
         <div class="card p-4 shadow-sm" style="width: 100%; max-width: 600px;">
             <h3 class="text-center mb-4">Add Event</h3>
-            <form method="POST" action="{{ route('admin.event.store')}}" enctype="multipart/form-data">
+            <form method="POST" action="{{route('admin.event.store')}}" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">

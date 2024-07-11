@@ -36,20 +36,20 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-    $validated = $request->validate([
-        'description' => 'required|string|max:255',
-        'category' => 'required|string|max:255',
-        'date_from' => 'required|date',
-        'date_to' => 'required|date|after_or_equal:date_from',
-        'cost' => 'required|numeric',
-        'status' => 'required|string|max:255',
-        'guide_id' => 'required|exists:guides,id',
-    ]);
+        $validated = $request->validate([
+            'description' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'date_from' => 'required|date',
+            'date_to' => 'required|date|after_or_equal:date_from',
+            'cost' => 'required|numeric',
+            'status' => 'required|string|max:255',
+            'guide' => 'required',
+        ]);
 
-    // Create the event using the validated data
-    $event = Event::create($validated);
-    $events= Event::all();
-    return view('admin.event_list', ['events'=>$events]);
+        // Create the event using the validated data
+        $event = Event::create($validated);
+        $events= Event::all();
+        return view('admin.event_list', ['events'=>$events]);
     }
 
     /**
